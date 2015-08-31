@@ -13,7 +13,7 @@
 
 @interface ViewController () <GCDWebUploaderDelegate>
 {
-    GCDWebUploader* _webServer;
+    GCDWebUploader *_webServer;
 }
 @end
 
@@ -31,6 +31,13 @@
     [super didReceiveMemoryWarning];
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    
+    [_webServer stop];
+}
+
 #pragma mark - Inner Methods
 
 - (void)startWebServer
@@ -39,9 +46,8 @@
     _webServer = [[GCDWebUploader alloc] initWithUploadDirectory:documentsPath];
     _webServer.delegate = self;
     _webServer.allowHiddenItems = YES;
+    _webServer.header = @"文件上传";
     [_webServer start];
-    
-    // web 地址 自动拷贝到粘贴板 方便用户在浏览器内输入
 }
 
 #pragma mark - GCDWebUploaderDelegate
@@ -50,7 +56,7 @@
  *
  *  @warning These methods are always called on the main thread in a serialized way.
  */
-- (void)webUploader:(GCDWebUploader*)uploader didDownloadFileAtPath:(NSString*)path
+- (void)webUploader:(GCDWebUploader *)uploader didDownloadFileAtPath:(NSString *)path
 {
     
 }
@@ -58,15 +64,15 @@
 /**
  *  This method is called whenever a file has been uploaded.
  */
-- (void)webUploader:(GCDWebUploader*)uploader didUploadFileAtPath:(NSString*)path
+- (void)webUploader:(GCDWebUploader *)uploader didUploadFileAtPath:(NSString *)path
 {
-    
+    NSLog(@"didUploadFileAtPath: %@", path);
 }
 
 /**
  *  This method is called whenever a file or directory has been moved.
  */
-- (void)webUploader:(GCDWebUploader*)uploader didMoveItemFromPath:(NSString*)fromPath toPath:(NSString*)toPath
+- (void)webUploader:(GCDWebUploader *)uploader didMoveItemFromPath:(NSString *)fromPath toPath:(NSString *)toPath
 {
     
 }
@@ -74,7 +80,7 @@
 /**
  *  This method is called whenever a file or directory has been deleted.
  */
-- (void)webUploader:(GCDWebUploader*)uploader didDeleteItemAtPath:(NSString*)path
+- (void)webUploader:(GCDWebUploader *)uploader didDeleteItemAtPath:(NSString *)path
 {
     
 }
@@ -82,7 +88,7 @@
 /**
  *  This method is called whenever a directory has been created.
  */
-- (void)webUploader:(GCDWebUploader*)uploader didCreateDirectoryAtPath:(NSString*)path
+- (void)webUploader:(GCDWebUploader *)uploader didCreateDirectoryAtPath:(NSString *)path
 {
     
 }
@@ -91,7 +97,7 @@
 /**
  *  This method is called after the server has successfully started.
  */
-- (void)webServerDidStart:(GCDWebServer*)server
+- (void)webServerDidStart:(GCDWebServer *)server
 {
     NSLog(@"\n\nServerURL: %@, port: %lu\n\n", server.serverURL, (unsigned long)server.port);
 }
@@ -100,9 +106,11 @@
  *  This method is called after the Bonjour registration for the server has
  *  successfully completed.
  */
-- (void)webServerDidCompleteBonjourRegistration:(GCDWebServer*)server
+- (void)webServerDidCompleteBonjourRegistration:(GCDWebServer *)server
 {
     NSLog(@"\n\nBonjourURL: %@\n\n", server.bonjourServerURL);
+    
+    // web 地址 自动拷贝到粘贴板 方便用户在浏览器内输入
 }
 
 /**
@@ -114,7 +122,7 @@
  *  until before the last HTTP request has been responded to (and the
  *  corresponding last GCDWebServerConnection closed).
  */
-- (void)webServerDidConnect:(GCDWebServer*)server
+- (void)webServerDidConnect:(GCDWebServer *)server
 {
     
 }
@@ -129,7 +137,7 @@
  *  requests). This effectively coalesces the calls to -webServerDidConnect:
  *  and -webServerDidDisconnect:.
  */
-- (void)webServerDidDisconnect:(GCDWebServer*)server
+- (void)webServerDidDisconnect:(GCDWebServer *)server
 {
     
 }
@@ -137,7 +145,7 @@
 /**
  *  This method is called after the server has stopped.
  */
-- (void)webServerDidStop:(GCDWebServer*)server
+- (void)webServerDidStop:(GCDWebServer *)server
 {
     
 }
