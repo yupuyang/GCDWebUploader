@@ -46,7 +46,8 @@
     _webServer = [[GCDWebUploader alloc] initWithUploadDirectory:documentsPath];
     _webServer.delegate = self;
     _webServer.allowHiddenItems = YES;
-    _webServer.header = @"文件上传";
+    _webServer.title = @"页面标题";
+    _webServer.header = @"文件管理";
     [_webServer start];
 }
 
@@ -99,7 +100,7 @@
  */
 - (void)webServerDidStart:(GCDWebServer *)server
 {
-    NSLog(@"\n\nServerURL: %@, port: %lu\n\n", server.serverURL, (unsigned long)server.port);
+    NSLog(@"\n\nServerURL: %@\n\n", [[server serverURL] absoluteString]);
 }
 
 /**
